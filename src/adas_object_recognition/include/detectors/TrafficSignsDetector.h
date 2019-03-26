@@ -6,6 +6,12 @@
 
 class TrafficSignsDetector {
 
+private:
+
+    void sharp(const cv::Mat& srcBGRIMage, cv::Mat& dstBGRImage);
+
+    void hsvFilter(const cv::Mat& srcBGRImage, cv::Mat& dstBinaryImage);
+
 public:
 
     TrafficSignsDetector() = default;
