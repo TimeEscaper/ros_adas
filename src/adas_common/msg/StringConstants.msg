@@ -1,0 +1,1 @@
+string NODE_TRAFFIC_SIGNS_DETECTOR = "traffic_signs_detector"

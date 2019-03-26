@@ -1,28 +1,24 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(adas_object_recognition)
+project(adas_common)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
-
-set(OpenCV_DIR /usr/local/share/OpenCV)
+# add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  cv_bridge
-  dynamic_reconfigure
-  image_transport
   roscpp
   rospy
   sensor_msgs
   std_msgs
-  adas_common
+  std_srvs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-find_package(OpenCV REQUIRED HINTS ${OpenCV_DIR} NO_DEFAULT_PATH)
+
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -54,11 +50,10 @@ find_package(OpenCV REQUIRED HINTS ${OpenCV_DIR} NO_DEFAULT_PATH)
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+   FILES
+   StringConstants.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -75,10 +70,10 @@ find_package(OpenCV REQUIRED HINTS ${OpenCV_DIR} NO_DEFAULT_PATH)
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   sensor_msgs#   std_msgs
-# )
+generate_messages(
+   DEPENDENCIES
+   std_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -111,8 +106,8 @@ find_package(OpenCV REQUIRED HINTS ${OpenCV_DIR} NO_DEFAULT_PATH)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES adas_object_recognition
-  CATKIN_DEPENDS cv_bridge dynamic_reconfigure image_transport roscpp rospy sensor_msgs std_msgs adas_common
+#  LIBRARIES adas_common
+  CATKIN_DEPENDS roscpp rospy sensor_msgs std_msgs std_srvs
 #  DEPENDS system_lib
 )
 
@@ -123,14 +118,13 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  ${OpenCV_INCLUDE_DIRS}
+# include
   ${catkin_INCLUDE_DIRS}
-  include
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/adas_object_recognition.cpp
+#   src/${PROJECT_NAME}/adas_common.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -141,7 +135,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/adas_object_recognition_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/adas_common_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -157,11 +151,6 @@ include_directories(
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
-
-add_executable(traffic_signs_detector
-        src/nodes/traffic_signs_detection_node.cpp)
-target_link_libraries(traffic_signs_detector ${catkin_LIBRARIES} ${OpenCV_LIBS})
-add_dependencies(traffic_signs_detector adas_common_generate_messages_cpp)
 
 #############
 ## Install ##
@@ -203,7 +192,7 @@ add_dependencies(traffic_signs_detector adas_common_generate_messages_cpp)
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_adas_object_recognition.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_adas_common.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
