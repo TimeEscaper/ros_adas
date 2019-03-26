@@ -10,7 +10,6 @@ set(OpenCV_DIR /usr/local/share/OpenCV)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  cv_bridge
   dynamic_reconfigure
   image_transport
   roscpp
@@ -112,7 +111,7 @@ find_package(OpenCV REQUIRED HINTS ${OpenCV_DIR} NO_DEFAULT_PATH)
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES adas_object_recognition
-  CATKIN_DEPENDS cv_bridge dynamic_reconfigure image_transport roscpp rospy sensor_msgs std_msgs adas_common
+  CATKIN_DEPENDS dynamic_reconfigure image_transport roscpp rospy sensor_msgs std_msgs adas_common
 #  DEPENDS system_lib
 )
 
@@ -159,7 +158,10 @@ include_directories(
 # )
 
 add_executable(traffic_signs_detector
-        src/nodes/traffic_signs_detection_node.cpp)
+        src/nodes/traffic_signs_detection_node.cpp
+        include/detectors/TrafficSignsDetector.h
+        src/detectors/TrafficSignsDetector.cpp
+        include/utils/ImageProcessingUtils.h)
 target_link_libraries(traffic_signs_detector ${catkin_LIBRARIES} ${OpenCV_LIBS})
 add_dependencies(traffic_signs_detector adas_common_generate_messages_cpp)
 
